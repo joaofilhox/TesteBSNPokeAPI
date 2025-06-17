@@ -1,0 +1,7 @@
+{
+  "name": "TesteBSNPokeAPI",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
