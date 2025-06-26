@@ -1,0 +1,12 @@
+.sprite-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+ion-card-content img {
+    width: 80px;
+    height: 80px;
+}

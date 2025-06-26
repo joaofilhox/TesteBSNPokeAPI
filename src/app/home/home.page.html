@@ -5,7 +5,8 @@
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="pokemon-grid">
-    <ion-card *ngFor="let pokemon of pokemons" class="pokemon-card">
+    <ion-card *ngFor="let pokemon of pokemons" class="pokemon-card"
+      [routerLink]="['/pokemon', getPokemonId(pokemon.url)]">
       <ion-card-content>
         <img
           [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getPokemonId(pokemon.url) + '.png'"
