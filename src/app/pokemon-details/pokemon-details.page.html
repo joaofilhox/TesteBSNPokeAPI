@@ -1,0 +1,27 @@
+<ion-header translucent="true" class="custom-header">
+  <ion-toolbar>
+    <ion-title class="custom-title">{{ pokemon?.name | titlecase }}</ion-title>
+    <ion-button expand="block" color="medium" routerLink="/home" class="ion-margin-top">
+      ← Voltar para lista
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" *ngIf="pokemon">
+  <ion-card>
+    <ion-card-content>
+      <div class="sprite-container">
+        <img [src]="pokemon.sprites.front_default" alt="Front" />
+        <img [src]="pokemon.sprites.back_default" alt="Back" />
+        <img [src]="pokemon.sprites.front_shiny" alt="Front Shiny" />
+        <img [src]="pokemon.sprites.back_shiny" alt="Back Shiny" />
+      </div>
+      <h2>{{ pokemon.name | titlecase }}</h2>
+      <p><strong>ID:</strong> {{ pokemon.id }}</p>
+      <p><strong>Altura:</strong> {{ pokemon.height }}</p>
+      <p><strong>Peso:</strong> {{ pokemon.weight }}</p>
+      <p><strong>Tipos:</strong> {{ tipos.join(', ') }}</p>
+      <p><strong>Habilidades:</strong> {{ habilidades.join(', ') }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
