@@ -1,20 +1,17 @@
-<ion-header [translucent]="true">
+<ion-header translucent="true" class="custom-header">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title class="custom-title">Pokémons</ion-title>
   </ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="pokemon-grid">
+    <ion-card *ngFor="let pokemon of pokemons" class="pokemon-card">
+      <ion-card-content>
+        <img
+          [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getPokemonId(pokemon.url) + '.png'"
+          alt="{{ pokemon.name }}" />
+        <h2>{{ pokemon.name }}</h2>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>
