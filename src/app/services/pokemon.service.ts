@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
 export class PokemonService {
   constructor(private httpClient: HttpClient) { }
 
-  public getPokemons() {
-    return this.httpClient.get('https://pokeapi.co/api/v2/pokemon?limit=20&offset=0');
+  public getPokemons(limit = 20, offset = 0) {
+    return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
   }
 }
