@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PokemonService } from '../services/pokemon.service';
+import { FavoritesService } from '../services/favorites.service';
 
-interface Pokemon {
+interface PokemonListItem {
   name: string;
   url: string;
 }
@@ -13,19 +15,23 @@ interface Pokemon {
   standalone: false,
 })
 export class HomePage implements OnInit {
-  pokemons: Pokemon[] = [];
+  pokemons: PokemonListItem[] = [];
   limit = 20;
   offset = 0;
   total = 0;
 
-  constructor(private pokemonService: PokemonService) { }
+  constructor(
+    private pokemonService: PokemonService,
+    private favoritesService: FavoritesService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.loadPokemons();
   }
 
   loadPokemons() {
-    this.pokemonService.getPokemons(this.limit, this.offset).subscribe((res: any) => {
+    this.pokemonService.getPokemons(this.limit, this.offset).subscribe((res) => {
       this.pokemons = res.results;
       this.total = res.count;
     });
@@ -47,5 +53,22 @@ export class HomePage implements OnInit {
 
   getPokemonId(url: string): string {
     return url.split('/').filter(Boolean).pop()!;
+  }
+
+  isFavorite(name: string): boolean {
+    return this.favoritesService.isFavorite(name);
+  }
+
+  toggleFavorite(name: string): void {
+    if (this.isFavorite(name)) {
+      this.favoritesService.removeFavorite(name);
+    } else {
+      this.favoritesService.addFavorite(name);
+    }
+  }
+
+  goToDetails(pokemon: PokemonListItem) {
+    const id = this.getPokemonId(pokemon.url);
+    this.router.navigate(['/pokemon', id]);
   }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { PokemonService } from '../services/pokemon.service';
+import { FavoritesService } from '../services/favorites.service';
+import { Pokemon } from '../models/pokemon.model';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -9,18 +11,34 @@ import { HttpClient } from '@angular/common/http';
   standalone: false
 })
 export class PokemonDetailsPage implements OnInit {
-  pokemon: any;
+  pokemon!: Pokemon;
   tipos: string[] = [];
   habilidades: string[] = [];
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) { }
+  constructor(
+    private route: ActivatedRoute,
+    private pokemonService: PokemonService,
+    private favoritesService: FavoritesService
+  ) { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.http.get(`https://pokeapi.co/api/v2/pokemon/${id}`).subscribe((res: any) => {
+    const id = this.route.snapshot.paramMap.get('id')!;
+    this.pokemonService.getPokemonDetails(id).subscribe((res) => {
       this.pokemon = res;
-      this.tipos = res.types.map((t: any) => t.type.name);
-      this.habilidades = res.abilities.map((a: any) => a.ability.name);
+      this.tipos = res.types.map(t => t.type.name);
+      this.habilidades = res.abilities.map(a => a.ability.name);
     });
+  }
+
+  isFavorite(): boolean {
+    return this.pokemon && this.favoritesService.isFavorite(this.pokemon.name);
+  }
+
+  toggleFavorite() {
+    if (this.isFavorite()) {
+      this.favoritesService.removeFavorite(this.pokemon.name);
+    } else {
+      this.favoritesService.addFavorite(this.pokemon.name);
+    }
   }
 }

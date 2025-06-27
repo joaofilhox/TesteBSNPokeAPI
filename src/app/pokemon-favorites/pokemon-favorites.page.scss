@@ -1,0 +1,79 @@
+.custom-header {
+    --background: linear-gradient(135deg, #00c6ff, #0072ff);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0f0e0e;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+ion-content {
+    --background: linear-gradient(145deg, #eef1f5, #dce3ec);
+}
+
+.pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.pokemon-card {
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pokemon-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+ion-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+}
+
+.pokemon-card img {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 12px;
+}
+
+.pokemon-card h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.favorite-icon {
+    font-size: 24px;
+    color: var(--ion-color-danger);
+    cursor: pointer;
+}
+
+ion-button.favorite-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+}
+
+.empty-message {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin-top: 40px;
+}

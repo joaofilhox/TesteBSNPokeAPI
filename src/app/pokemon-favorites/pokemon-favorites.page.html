@@ -1,0 +1,27 @@
+<ion-header translucent="true" class="custom-header">
+  <ion-toolbar>
+    <ion-title class="custom-title">Favoritos</ion-title>
+  </ion-toolbar>
+  <ion-button routerLink="/home" expand="block" color="primary">
+    ← Voltar para todos
+  </ion-button>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="favoritePokemons.length === 0" class="empty-message">
+    Nenhum Pokémon favoritado.
+  </div>
+
+  <div class="pokemon-grid" *ngIf="favoritePokemons.length > 0">
+    <ion-card *ngFor="let pokemon of favoritePokemons" class="pokemon-card" (click)="goToDetails(pokemon)">
+      <ion-card-content>
+        <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" />
+        <h2>{{ pokemon.name }}</h2>
+        <ion-button class="favorite-button" fill="clear" size="small"
+          (click)="removeFavorite(pokemon.name); $event.stopPropagation()">
+          <ion-icon slot="icon-only" name="heart"></ion-icon>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
