@@ -2,20 +2,27 @@
   <ion-toolbar>
     <ion-title class="custom-title">Pokémons</ion-title>
   </ion-toolbar>
+  <ion-button routerLink="/pokemon-favorites" expand="block" color="primary">
+    Ver Favoritos
+  </ion-button>
+
 </ion-header>
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="pokemon-grid">
-    <ion-card *ngFor="let pokemon of pokemons" class="pokemon-card"
-      [routerLink]="['/pokemon', getPokemonId(pokemon.url)]">
+    <ion-card *ngFor="let pokemon of pokemons" class="pokemon-card" (click)="goToDetails(pokemon)">
       <ion-card-content>
         <img
           [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getPokemonId(pokemon.url) + '.png'"
           alt="{{ pokemon.name }}" />
         <h2>{{ pokemon.name }}</h2>
+        <ion-button class="favorite-button" fill="clear" size="small"
+          (click)="toggleFavorite(pokemon.name); $event.stopPropagation()">
+          <ion-icon slot="icon-only" [name]="isFavorite(pokemon.name) ? 'heart' : 'heart-outline'">
+          </ion-icon>
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
-
   <div class="pagination-controls">
     <ion-button (click)="previousPage()" [disabled]="offset === 0" color="medium" fill="outline">
       Anterior

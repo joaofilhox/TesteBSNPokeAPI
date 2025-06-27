@@ -63,3 +63,20 @@ ion-card-content {
   margin-top: 24px;
   padding: 0 16px;
 }
+
+.favorite-icon {
+  font-size: 24px;
+  color: var(--ion-color-danger);
+  cursor: pointer;
+}
+
+ion-card-content {
+  position: relative;
+}
+
+ion-button.favorite-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+}

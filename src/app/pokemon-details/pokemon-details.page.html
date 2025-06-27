@@ -1,12 +1,20 @@
 <ion-header translucent="true" class="custom-header">
   <ion-toolbar>
-    <ion-title class="custom-title">{{ pokemon?.name | titlecase }}</ion-title>
-    <ion-button expand="block" color="medium" routerLink="/home" class="ion-margin-top">
-      ← Voltar para lista
-    </ion-button>
+    <ion-title class="custom-title">{{ pokemon ? pokemon.name : 'Carregando...' }}</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home" color="medium">
+        ← Lista Todos
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/pokemon-favorites" color="primary">
+        ← Lista Favoritos
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true" class="ion-padding" *ngIf="pokemon">
   <ion-card>
     <ion-card-content>
@@ -16,12 +24,17 @@
         <img [src]="pokemon.sprites.front_shiny" alt="Front Shiny" />
         <img [src]="pokemon.sprites.back_shiny" alt="Back Shiny" />
       </div>
-      <h2>{{ pokemon.name | titlecase }}</h2>
+      <h2>{{ pokemon.name }}</h2>
       <p><strong>ID:</strong> {{ pokemon.id }}</p>
       <p><strong>Altura:</strong> {{ pokemon.height }}</p>
       <p><strong>Peso:</strong> {{ pokemon.weight }}</p>
       <p><strong>Tipos:</strong> {{ tipos.join(', ') }}</p>
       <p><strong>Habilidades:</strong> {{ habilidades.join(', ') }}</p>
+
+      <ion-button expand="block" color="blue" fill="outline" (click)="toggleFavorite()">
+        <ion-icon [name]="isFavorite() ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
+        {{ isFavorite() ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos' }}
+      </ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>
