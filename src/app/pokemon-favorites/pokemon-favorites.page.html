@@ -1,21 +1,40 @@
 <ion-header translucent="true" class="custom-header">
   <ion-toolbar>
-    <ion-title class="custom-title">Favoritos</ion-title>
+    <ion-title class="custom-title">
+      <ion-icon name="heart" class="title-icon"></ion-icon>
+      Favoritos
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="favorites-button" routerLink="/home" fill="solid">
+        <ion-icon slot="start" name="logo-octocat"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-  <ion-button routerLink="/home" expand="block" color="primary">
-    ← Voltar para todos
-  </ion-button>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div *ngIf="favoritePokemons.length === 0" class="empty-message">
-    Nenhum Pokémon favoritado.
+  <div *ngIf="favoritePokemons.length > 0" class="favorites-header fade-in">
+    <h2>Seus Pokémons Favoritos</h2>
+    <p>Gerencie sua coleção pessoal de Pokémons favoritos</p>
+    <div class="favorites-count">{{ favoritePokemons.length }} Pokémon{{ favoritePokemons.length !== 1 ? 's' : '' }}
+    </div>
   </div>
 
-  <div class="pokemon-grid" *ngIf="favoritePokemons.length > 0">
+  <div *ngIf="favoritePokemons.length === 0" class="empty-message">
+    <ion-icon name="heart-outline"></ion-icon>
+    <h3>Nenhum Pokémon favoritado</h3>
+    <p>Você ainda não adicionou nenhum Pokémon aos seus favoritos. Explore a lista de Pokémons e adicione seus
+      preferidos!</p>
+    <ion-button fill="solid" color="primary" routerLink="/home">
+      <ion-icon slot="start" name="search"></ion-icon>
+      Explorar Pokémons
+    </ion-button>
+  </div>
+
+  <div class="pokemon-grid fade-in" *ngIf="favoritePokemons.length > 0">
     <ion-card *ngFor="let pokemon of favoritePokemons" class="pokemon-card" (click)="goToDetails(pokemon)">
       <ion-card-content>
-        <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" />
+        <img [src]="pokemon.sprites.front_default" alt="{{ pokemon.name }}" loading="lazy" />
         <h2>{{ pokemon.name }}</h2>
         <ion-button class="favorite-button" fill="clear" size="small"
           (click)="removeFavorite(pokemon.name); $event.stopPropagation()">

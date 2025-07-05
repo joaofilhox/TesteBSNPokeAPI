@@ -1,82 +1,275 @@
 .custom-header {
-  --background: linear-gradient(135deg, #00c6ff, #0072ff);
+  --background: linear-gradient(135deg, #6a11cb, #2575fc);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .custom-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #0f0e0e;
-  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2575fc;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
+  margin: 0;
+
+  .title-icon {
+    font-size: var(--font-size-lg);
+    color: var(--accent-color);
+  }
+}
+
+.favorites-button {
+  --background: rgba(255, 255, 255, 0.15);
+  --background-activated: rgba(255, 255, 255, 0.25);
+  --color: var(--text-inverse);
+  --border-radius: var(--border-radius-md);
+  --padding-start: var(--spacing-md);
+  --padding-end: var(--spacing-md);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all var(--transition-normal);
+
+  &:hover {
+    --background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  ion-icon {
+    color: var(--accent-color);
+    font-size: var(--font-size-lg);
+  }
 }
 
 ion-content {
-  --background: linear-gradient(145deg, #eef1f5, #dce3ec);
+  --background: var(--bg-primary);
+  padding: var(--spacing-md);
 }
 
 .pokemon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(var(--grid-columns-mobile), 1fr);
+  gap: var(--grid-gap);
+  margin-top: var(--spacing-md);
+  padding: 0 var(--spacing-sm);
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    padding: 0 var(--spacing-md);
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--spacing-xl);
+    padding: 0 var(--spacing-lg);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--spacing-xl);
+    padding: 0 var(--spacing-xl);
+  }
 }
 
 .pokemon-card {
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: var(--card-border-radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  ion-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: var(--spacing-md);
+    min-height: 160px;
+  }
+
+  img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-tertiary);
+    transition: transform var(--transition-normal);
+
+    @media (min-width: 768px) {
+      width: 90px;
+      height: 90px;
+    }
+
+    @media (min-width: 992px) {
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+
+  h2 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    text-transform: capitalize;
+    margin: 0;
+    text-align: center;
+    line-height: var(--line-height-tight);
+
+    @media (min-width: 768px) {
+      font-size: var(--font-size-lg);
+    }
+  }
 }
 
-.pokemon-card:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-}
+ion-button.favorite-button {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  z-index: 2;
+  --background: rgba(255, 255, 255, 0.9);
+  --background-activated: rgba(255, 255, 255, 1);
+  --color: var(--accent-color);
+  --border-radius: 50%;
+  --padding-start: var(--spacing-xs);
+  --padding-end: var(--spacing-xs);
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 
-ion-card-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
+  &:hover {
+    --background: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+  }
 
-.pokemon-card img {
-  width: 90px;
-  height: 90px;
-  margin-bottom: 12px;
-}
-
-.pokemon-card h2 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #2c3e50;
-  margin: 0;
-  text-transform: capitalize;
+  ion-icon {
+    font-size: var(--font-size-md);
+    color: var(--accent-color);
+  }
 }
 
 .pagination-controls {
   display: flex;
   justify-content: space-between;
-  margin-top: 24px;
-  padding: 0 16px;
+  align-items: center;
+  margin: var(--spacing-xl) 0 var(--spacing-lg);
+  padding: 0 var(--spacing-sm);
+  gap: var(--spacing-md);
+
+  @media (min-width: 768px) {
+    padding: 0 var(--spacing-md);
+    gap: var(--spacing-lg);
+  }
+
+  @media (min-width: 992px) {
+    padding: 0 var(--spacing-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  ion-button {
+    flex: 1;
+    max-width: 200px;
+    --border-radius: var(--border-radius-md);
+    --padding-start: var(--spacing-md);
+    --padding-end: var(--spacing-md);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-normal);
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      transform: none;
+    }
+  }
+
+  .pagination-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+
+    @media (max-width: 576px) {
+      display: none;
+    }
+  }
 }
 
-.favorite-icon {
-  font-size: 24px;
-  color: var(--ion-color-danger);
-  cursor: pointer;
+.loading-skeleton {
+  background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: var(--border-radius-sm);
 }
 
-ion-card-content {
-  position: relative;
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
-ion-button.favorite-button {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 2;
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xxl) var(--spacing-md);
+  color: var(--text-secondary);
+
+  ion-icon {
+    font-size: 64px;
+    color: var(--gray-400);
+    margin-bottom: var(--spacing-md);
+  }
+
+  h3 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+  }
+
+  p {
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-lg);
+  }
 }

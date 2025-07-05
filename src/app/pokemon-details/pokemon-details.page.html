@@ -1,37 +1,118 @@
 <ion-header translucent="true" class="custom-header">
   <ion-toolbar>
-    <ion-title class="custom-title">{{ pokemon ? pokemon.name : 'Carregando...' }}</ion-title>
-  </ion-toolbar>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button routerLink="/home" color="medium">
-        ← Lista Todos
+    <ion-title class="custom-title">
+      <ion-icon name="logo-electron" class="title-icon"></ion-icon>
+      {{ pokemon ? pokemon.name : 'Carregando...' }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="favorites-button" routerLink="/home" fill="solid">
+        <ion-icon slot="start" name="logo-octocat"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button routerLink="/pokemon-favorites" color="primary">
-        ← Lista Favoritos
+      <ion-button class="favorites-button" routerLink="/pokemon-favorites" fill="solid">
+        <ion-icon slot="start" name="heart"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true" class="ion-padding" *ngIf="pokemon">
-  <ion-card>
-    <ion-card-content>
-      <div class="sprite-container">
-        <img [src]="pokemon.sprites.front_default" alt="Front" />
-        <img [src]="pokemon.sprites.back_default" alt="Back" />
-        <img [src]="pokemon.sprites.front_shiny" alt="Front Shiny" />
-        <img [src]="pokemon.sprites.back_shiny" alt="Back Shiny" />
-      </div>
-      <h2>{{ pokemon.name }}</h2>
-      <p><strong>ID:</strong> {{ pokemon.id }}</p>
-      <p><strong>Altura:</strong> {{ pokemon.height }}</p>
-      <p><strong>Peso:</strong> {{ pokemon.weight }}</p>
-      <p><strong>Tipos:</strong> {{ tipos.join(', ') }}</p>
-      <p><strong>Habilidades:</strong> {{ habilidades.join(', ') }}</p>
 
-      <ion-button expand="block" color="blue" fill="outline" (click)="toggleFavorite()">
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="loading" class="loading-state">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando detalhes do Pokémon...</p>
+  </div>
+
+  <div *ngIf="error" class="error-state">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <h3>Erro ao carregar Pokémon</h3>
+    <p>{{ error }}</p>
+    <ion-button fill="solid" color="primary" (click)="loadPokemon()">
+      <ion-icon slot="start" name="refresh"></ion-icon>
+      Tentar Novamente
+    </ion-button>
+  </div>
+
+  <ion-card class="details-card fade-in" *ngIf="pokemon && !loading">
+    <ion-card-content>
+      <div class="sprite-container cinematic">
+        <div class="cinematic-info">
+          {{ sprites[currentSpriteIndex].label || 'Carregando...' }}
+        </div>
+
+        <div class="sprite-item" *ngFor="let sprite of sprites; let i = index"
+          [class.active]="currentSpriteIndex === i">
+          <img [src]="sprite.src" [alt]="sprite.label" loading="lazy" />
+          <div class="sprite-label">{{ sprite.label }}</div>
+        </div>
+
+        <div class="cinematic-controls">
+          <div class="control-dot" *ngFor="let sprite of sprites; let i = index"
+            [class.active]="currentSpriteIndex === i" (click)="setActiveSprite(i)">
+          </div>
+        </div>
+      </div>
+
+      <h2>{{ pokemon.name }}</h2>
+
+      <div class="pokemon-info">
+        <div class="info-section">
+          <h3>Informações Básicas</h3>
+          <div class="info-item">
+            <span class="label">ID:</span>
+            <span class="value">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Altura:</span>
+            <span class="value">{{ pokemon.height / 10 }}m</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Peso:</span>
+            <span class="value">{{ pokemon.weight / 10 }}kg</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Experiência Base:</span>
+            <span class="value">{{ pokemon.base_experience }}</span>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h3>Características</h3>
+          <div class="info-item">
+            <span class="label">Tipos:</span>
+            <span class="value">{{ tipos.join(', ') }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Habilidades:</span>
+            <span class="value">{{ habilidades.join(', ') }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Forma:</span>
+            <span class="value">{{ pokemon.forms[0].name || 'Padrão' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Espécie:</span>
+            <span class="value">{{ pokemon.species.name || 'Desconhecida' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section" style="margin-top: var(--spacing-lg);">
+        <h3>Estatísticas</h3>
+        <div class="stats-grid">
+          <div class="stat-item" *ngFor="let stat of pokemon.stats">
+            <div class="stat-header">
+              <span class="stat-name">{{ getStatName(stat.stat.name) }}</span>
+              <span class="stat-value">{{ stat.base_stat }}</span>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-fill" [style.width.%]="(stat.base_stat / 255) * 100"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ion-button expand="block" fill="outline" color="primary" (click)="toggleFavorite()">
         <ion-icon [name]="isFavorite() ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
         {{ isFavorite() ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos' }}
       </ion-button>
