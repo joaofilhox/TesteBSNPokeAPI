@@ -18,4 +18,10 @@ export class PokemonService {
   getPokemonDetails(idOrName: string): Observable<Pokemon> {
     return this.httpClient.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${idOrName}`);
   }
+
+  searchPokemon(name: string): Observable<{ count: number; results: { name: string; url: string }[] }> {
+    return this.httpClient.get<{ count: number; results: { name: string; url: string }[] }>(
+      `https://pokeapi.co/api/v2/pokemon?limit=1025`
+    );
+  }
 }
