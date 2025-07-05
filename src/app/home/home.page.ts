@@ -16,10 +16,14 @@ interface PokemonListItem {
 })
 export class HomePage implements OnInit {
   pokemons: PokemonListItem[] = [];
+  allPokemons: PokemonListItem[] = [];
+  filteredPokemons: PokemonListItem[] = [];
   limit = 20;
   offset = 0;
   total = 0;
   loading = false;
+  searchTerm = '';
+  isSearching = false;
   Math = Math;
 
   constructor(
@@ -30,6 +34,7 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.loadPokemons();
+    this.loadAllPokemonsForSearch();
   }
 
   loadPokemons() {
@@ -47,17 +52,36 @@ export class HomePage implements OnInit {
     });
   }
 
+  loadAllPokemonsForSearch() {
+    this.pokemonService.searchPokemon('').subscribe({
+      next: (res) => {
+        this.allPokemons = res.results;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar todos os pokémons para busca:', error);
+      }
+    });
+  }
+
   nextPage() {
     if (this.offset + this.limit < this.total) {
       this.offset += this.limit;
-      this.loadPokemons();
+      if (this.isSearching) {
+        this.updateDisplayedPokemons();
+      } else {
+        this.loadPokemons();
+      }
     }
   }
 
   previousPage() {
     if (this.offset >= this.limit) {
       this.offset -= this.limit;
-      this.loadPokemons();
+      if (this.isSearching) {
+        this.updateDisplayedPokemons();
+      } else {
+        this.loadPokemons();
+      }
     }
   }
 
@@ -80,5 +104,34 @@ export class HomePage implements OnInit {
   goToDetails(pokemon: PokemonListItem) {
     const id = this.getPokemonId(pokemon.url);
     this.router.navigate(['/pokemon', id]);
+  }
+
+  onSearchChange(event: any) {
+    const searchValue = event.detail.value?.toLowerCase().trim();
+    this.searchTerm = searchValue;
+
+    if (!searchValue) {
+      this.isSearching = false;
+      this.offset = 0;
+      this.loadPokemons();
+      return;
+    }
+
+    this.isSearching = true;
+    this.offset = 0;
+    this.filteredPokemons = this.allPokemons.filter(pokemon =>
+      pokemon.name.toLowerCase().includes(searchValue)
+    );
+
+    this.total = this.filteredPokemons.length;
+    this.updateDisplayedPokemons();
+  }
+
+  updateDisplayedPokemons() {
+    if (this.isSearching) {
+      const startIndex = this.offset;
+      const endIndex = startIndex + this.limit;
+      this.pokemons = this.filteredPokemons.slice(startIndex, endIndex);
+    }
   }
 }

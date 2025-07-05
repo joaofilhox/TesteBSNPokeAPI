@@ -163,13 +163,11 @@ ion-button.favorite-button {
   height: 32px;
   min-width: 32px;
   min-height: 32px;
-  box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
 
   &:hover {
     --background: rgba(255, 255, 255, 1);
     transform: scale(1.1);
-    box-shadow: var(--shadow-md);
   }
 
   ion-icon {
@@ -271,5 +269,84 @@ ion-button.favorite-button {
     font-size: var(--font-size-md);
     line-height: var(--line-height-relaxed);
     margin-bottom: var(--spacing-lg);
+  }
+}
+
+.search-container {
+  margin-bottom: var(--spacing-lg);
+  padding: 0 var(--spacing-sm);
+
+  @media (min-width: 768px) {
+    padding: 0 var(--spacing-md);
+  }
+
+  @media (min-width: 992px) {
+    padding: 0 var(--spacing-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.search-bar {
+  --background: var(--card-bg);
+  --border-radius: var(--border-radius-lg);
+  --box-shadow: var(--shadow-sm);
+  --color: var(--text-primary);
+  --placeholder-color: var(--text-tertiary);
+  --icon-color: var(--accent-color);
+  --clear-button-color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+
+  &:focus-within {
+    --box-shadow: var(--shadow-md);
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+  }
+
+  ion-searchbar {
+    --background: transparent;
+    --color: var(--text-primary);
+    --placeholder-color: var(--text-tertiary);
+    --icon-color: var(--accent-color);
+    --clear-button-color: var(--text-secondary);
+  }
+}
+
+.search-results {
+  text-align: center;
+  margin: var(--spacing-lg) 0;
+  padding: 0 var(--spacing-sm);
+
+  @media (min-width: 768px) {
+    padding: 0 var(--spacing-md);
+  }
+
+  @media (min-width: 992px) {
+    padding: 0 var(--spacing-lg);
+  }
+
+  .search-info {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+  }
+}
+
+.search-pagination {
+  margin-top: var(--spacing-md);
+
+  .pagination-info {
+    background: var(--card-bg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
   }
 }
