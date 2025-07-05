@@ -31,19 +31,30 @@ export class PokemonFavoritesPage implements OnInit {
     const names = this.favoritesService.getFavorites();
     this.favoritePokemons = [];
 
+    if (names.length === 0) {
+      return;
+    }
+
     const observables = names.map(name =>
-      this.pokemonService.getPokemonDetails(name).toPromise().catch(() => undefined)
+      this.pokemonService.getPokemonDetails(name).pipe(
+      )
     );
 
-    Promise.all(observables).then(results => {
-      this.favoritePokemons = results.filter((p): p is Pokemon => !!p);
+    names.forEach(name => {
+      this.pokemonService.getPokemonDetails(name).subscribe({
+        next: (pokemon) => {
+          this.favoritePokemons.push(pokemon);
+        },
+        error: () => {
+        }
+      });
     });
   }
 
 
   removeFavorite(name: string) {
     this.favoritesService.removeFavorite(name);
-    this.loadFavorites(); // ✅ Recarrega depois de remover
+    this.loadFavorites();
   }
 
   goToDetails(pokemon: Pokemon) {

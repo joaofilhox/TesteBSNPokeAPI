@@ -16,7 +16,7 @@ describe('PokemonService', () => {
   });
 
   afterEach(() => {
-    httpMock.verify(); // Verifica que não ficou requisição pendente
+    httpMock.verify();
   });
 
   it('should be created', () => {
@@ -41,5 +41,44 @@ describe('PokemonService', () => {
     const req = httpMock.expectOne('https://pokeapi.co/api/v2/pokemon/1');
     expect(req.request.method).toBe('GET');
     req.flush({});
+  });
+
+  it('should search pokemons', () => {
+    service.searchPokemon('pika').subscribe(res => {
+      expect(res).toBeTruthy();
+    });
+
+    const req = httpMock.expectOne('https://pokeapi.co/api/v2/pokemon?limit=1025');
+    expect(req.request.method).toBe('GET');
+    req.flush({
+      results: [
+        { name: 'pikachu', url: 'https://pokeapi.co/api/v2/pokemon/25/' }
+      ],
+      count: 1
+    });
+  });
+
+  it('should handle error in pokemon list request', () => {
+    service.getPokemons(10, 0).subscribe({
+      next: () => fail('should have failed'),
+      error: (error) => {
+        expect(error).toBeTruthy();
+      }
+    });
+
+    const req = httpMock.expectOne('https://pokeapi.co/api/v2/pokemon?limit=10&offset=0');
+    req.error(new ErrorEvent('Network error'));
+  });
+
+  it('should handle error in pokemon details request', () => {
+    service.getPokemonDetails('1').subscribe({
+      next: () => fail('should have failed'),
+      error: (error) => {
+        expect(error).toBeTruthy();
+      }
+    });
+
+    const req = httpMock.expectOne('https://pokeapi.co/api/v2/pokemon/1');
+    req.error(new ErrorEvent('Network error'));
   });
 });
