@@ -19,6 +19,8 @@ export class HomePage implements OnInit {
   limit = 20;
   offset = 0;
   total = 0;
+  loading = false;
+  Math = Math;
 
   constructor(
     private pokemonService: PokemonService,
@@ -31,9 +33,17 @@ export class HomePage implements OnInit {
   }
 
   loadPokemons() {
-    this.pokemonService.getPokemons(this.limit, this.offset).subscribe((res) => {
-      this.pokemons = res.results;
-      this.total = res.count;
+    this.loading = true;
+    this.pokemonService.getPokemons(this.limit, this.offset).subscribe({
+      next: (res) => {
+        this.pokemons = res.results;
+        this.total = res.count;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar pokémons:', error);
+        this.loading = false;
+      }
     });
   }
 

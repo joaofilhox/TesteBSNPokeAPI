@@ -1,34 +1,66 @@
 <ion-header translucent="true" class="custom-header">
   <ion-toolbar>
-    <ion-title class="custom-title">Pokémons</ion-title>
+    <ion-title class="custom-title">
+      <ion-icon name="logo-octocat" class="title-icon"></ion-icon>
+      Pokémons
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="favorites-button" routerLink="/pokemon-favorites" fill="solid">
+        <ion-icon slot="start" name="heart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
-  <ion-button routerLink="/pokemon-favorites" expand="block" color="primary">
-    Ver Favoritos
-  </ion-button>
-
 </ion-header>
+
 <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="pokemon-grid">
+  <div *ngIf="loading" class="pokemon-grid">
+    <ion-card *ngFor="let item of [1,2,3,4,5,6,7,8]" class="pokemon-card loading-skeleton">
+      <ion-card-content>
+        <div class="loading-skeleton" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 16px;"></div>
+        <div class="loading-skeleton" style="width: 60%; height: 16px; margin-bottom: 8px;"></div>
+        <div class="loading-skeleton" style="width: 40%; height: 12px;"></div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="!loading && pokemons.length > 0" class="pokemon-grid fade-in">
     <ion-card *ngFor="let pokemon of pokemons" class="pokemon-card" (click)="goToDetails(pokemon)">
       <ion-card-content>
         <img
           [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + getPokemonId(pokemon.url) + '.png'"
-          alt="{{ pokemon.name }}" />
+          [alt]="pokemon.name" loading="lazy" />
         <h2>{{ pokemon.name }}</h2>
         <ion-button class="favorite-button" fill="clear" size="small"
           (click)="toggleFavorite(pokemon.name); $event.stopPropagation()">
-          <ion-icon slot="icon-only" [name]="isFavorite(pokemon.name) ? 'heart' : 'heart-outline'">
-          </ion-icon>
+          <ion-icon slot="icon-only" [name]="isFavorite(pokemon.name) ? 'heart' : 'heart-outline'"></ion-icon>
         </ion-button>
       </ion-card-content>
     </ion-card>
   </div>
-  <div class="pagination-controls">
-    <ion-button (click)="previousPage()" [disabled]="offset === 0" color="medium" fill="outline">
+
+  <div *ngIf="!loading && pokemons.length === 0" class="empty-state">
+    <ion-icon name="sad-outline"></ion-icon>
+    <h3>Nenhum Pokémon encontrado</h3>
+    <p>Tente ajustar os filtros ou verificar sua conexão com a internet.</p>
+    <ion-button fill="solid" color="primary" (click)="loadPokemons()">
+      <ion-icon slot="start" name="refresh"></ion-icon>
+      Tentar Novamente
+    </ion-button>
+  </div>
+
+  <div *ngIf="!loading && pokemons.length > 0" class="pagination-controls">
+    <ion-button (click)="previousPage()" [disabled]="offset === 0" fill="outline" color="medium">
+      <ion-icon slot="start" name="chevron-back"></ion-icon>
       Anterior
     </ion-button>
-    <ion-button (click)="nextPage()" [disabled]="offset + limit >= total" color="primary" fill="solid">
+
+    <div class="pagination-info">
+      <span class="text-secondary">Página {{ Math.floor(offset / limit) + 1 }}</span>
+    </div>
+
+    <ion-button (click)="nextPage()" [disabled]="offset + limit >= total" fill="solid" color="primary">
       Próxima
+      <ion-icon slot="end" name="chevron-forward"></ion-icon>
     </ion-button>
   </div>
 </ion-content>
